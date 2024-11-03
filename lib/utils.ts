@@ -7,6 +7,7 @@ export function cn(...inputs: ClassValue[]) {
 
 export function fix_latex(input: string) {
   input = input.replace(/&/g, "\\&");
+  input = input.replace(/\$/g, "\\$");
 
   return input;
 }

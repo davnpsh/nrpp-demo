@@ -11,6 +11,7 @@ import TeX from "@matejmazur/react-katex";
 import { NRPP } from "@davnpsh/nrpp";
 import Productions from "@/components/ownui/Productions";
 import First from "@/components/ownui/First";
+import Follow from "@/components/ownui/Follow";
 
 export default function Page() {
   const [latexEnabled, setLatexEnabled] = useState(true);
@@ -97,6 +98,7 @@ export default function Page() {
           />
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <First data={parser.first.export()} latex={latexEnabled} />
+            <Follow data={parser.follow.export()} latex={latexEnabled} />
           </div>
         </>
       )}
