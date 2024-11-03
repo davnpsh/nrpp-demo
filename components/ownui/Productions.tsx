@@ -12,7 +12,7 @@ export default function Productions({ productions, latex }: ProductionsProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Productions without left recursion and left-factored</CardTitle>
+        <CardTitle>Grammar without left recursion and left-factored</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="bg-gray-100 p-4 rounded-md">

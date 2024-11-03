@@ -12,6 +12,7 @@ import { NRPP } from "@davnpsh/nrpp";
 import Productions from "@/components/ownui/Productions";
 import First from "@/components/ownui/First";
 import Follow from "@/components/ownui/Follow";
+import M from "@/components/ownui/M";
 
 export default function Page() {
   const [latexEnabled, setLatexEnabled] = useState(true);
@@ -100,6 +101,7 @@ export default function Page() {
             <First data={parser.first.export()} latex={latexEnabled} />
             <Follow data={parser.follow.export()} latex={latexEnabled} />
           </div>
+          <M data={parser.M_table.export()} latex={latexEnabled} />
         </>
       )}
     </div>
