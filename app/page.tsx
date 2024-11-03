@@ -13,11 +13,14 @@ import Productions from "@/components/ownui/Productions";
 import First from "@/components/ownui/First";
 import Follow from "@/components/ownui/Follow";
 import M from "@/components/ownui/M";
+import TDP from "@/components/ownui/TDP";
 
 export default function Page() {
   const [latexEnabled, setLatexEnabled] = useState(true);
   const [fileContent, setFileContent] = useState<string | null>(null);
   const [parser, setParser] = useState<NRPP | null>(null);
+  const [inputValue, setInputValue] = useState<string>("");
+  const [tdp, setTdp] = useState<any | null>(null);
 
   const handleFileUpload = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -35,6 +38,10 @@ export default function Page() {
     }
   };
 
+  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setInputValue(event.target.value);
+  };
+
   const handleAnalyze = () => {
     if (fileContent) {
       // Declare new parser
@@ -42,6 +49,13 @@ export default function Page() {
         setParser(new NRPP(fileContent));
       } catch {}
     }
+  };
+
+  const handleTest = () => {
+    // Declare new tdp
+    try {
+      setTdp(parser?.TDP_table(inputValue));
+    } catch {}
   };
 
   return (
@@ -102,6 +116,27 @@ export default function Page() {
             <Follow data={parser.follow.export()} latex={latexEnabled} />
           </div>
           <M data={parser.M_table.export()} latex={latexEnabled} />
+
+          {/* Input with Button */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Top-Down parsing</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="flex space-x-2">
+                <Input
+                  type="text"
+                  placeholder="Enter string"
+                  className="flex-grow"
+                  value={inputValue}
+                  onChange={handleInputChange}
+                />
+                <Button onClick={handleTest}>Test</Button>
+              </div>
+            </CardContent>
+          </Card>
+
+          {tdp && <TDP data={tdp.export()} recognizes={tdp.recognize} latex={latexEnabled} />}
         </>
       )}
     </div>
