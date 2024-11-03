@@ -15,6 +15,7 @@ import Follow from "@/components/ownui/Follow";
 import M from "@/components/ownui/M";
 import TDP from "@/components/ownui/TDP";
 import { Github } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 export default function Page() {
   const [latexEnabled, setLatexEnabled] = useState(true);
@@ -22,6 +23,7 @@ export default function Page() {
   const [parser, setParser] = useState<NRPP | null>(null);
   const [inputValue, setInputValue] = useState<string>("");
   const [tdp, setTdp] = useState<any | null>(null);
+  const { toast } = useToast();
 
   const handleFileUpload = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -31,6 +33,11 @@ export default function Page() {
         // Set file content
         const content = e.target?.result as string;
         setFileContent(content);
+
+        // Reset
+        setParser(null);
+        setInputValue("");
+        setTdp(null);
       };
       reader.readAsText(file);
     } else {
@@ -39,24 +46,38 @@ export default function Page() {
     }
   };
 
-  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setInputValue(event.target.value);
-  };
-
   const handleAnalyze = () => {
     if (fileContent) {
       // Declare new parser
       try {
         setParser(new NRPP(fileContent));
-      } catch {}
+      } catch (e: unknown) {
+        toast({
+          variant: "destructive",
+          title: "Something went wrong.",
+          description:
+            e instanceof Error ? e.message : "An unknown error occurred.",
+        });
+      }
     }
+  };
+
+  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setInputValue(event.target.value);
   };
 
   const handleTest = () => {
     // Declare new tdp
     try {
       setTdp(parser?.TDP_table(inputValue));
-    } catch {}
+    } catch (e: unknown) {
+      toast({
+        variant: "destructive",
+        title: "Something went wrong.",
+        description:
+          e instanceof Error ? e.message : "An unknown error occurred.",
+      });
+    }
   };
 
   return (
