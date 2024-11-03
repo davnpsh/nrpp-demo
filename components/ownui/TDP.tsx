@@ -44,8 +44,8 @@ export default function TDP({ data, recognizes, latex }: TDPProps) {
           </TableHeader>
           <TableBody>
             {latex
-              ? data.map((row) => (
-                  <TableRow>
+              ? data.map((row, index) => (
+                  <TableRow key={index}>
                     <TableCell>
                       <TeX math={fix_latex(row.stack)} />
                     </TableCell>
@@ -57,8 +57,8 @@ export default function TDP({ data, recognizes, latex }: TDPProps) {
                     </TableCell>
                   </TableRow>
                 ))
-              : data.map((row) => (
-                  <TableRow>
+              : data.map((row, index) => (
+                  <TableRow key={index}>
                     <TableCell>
                       <pre>{row.stack}</pre>
                     </TableCell>
