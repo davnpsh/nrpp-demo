@@ -14,6 +14,7 @@ import First from "@/components/ownui/First";
 import Follow from "@/components/ownui/Follow";
 import M from "@/components/ownui/M";
 import TDP from "@/components/ownui/TDP";
+import { Github } from "lucide-react";
 
 export default function Page() {
   const [latexEnabled, setLatexEnabled] = useState(true);
@@ -60,7 +61,12 @@ export default function Page() {
 
   return (
     <div className="container mx-auto p-4 space-y-6 max-w-4xl">
-      <h1 className="text-2xl font-bold mb-4 select-none">nrpp</h1>
+      <h1 className="text-2xl font-bold mb-4 flex items-center justify-between">
+        nrpp
+        <a href="https://github.com/davnpsh/nrpp" target="_blank">
+          <Github className="w-6 h-6" />
+        </a>
+      </h1>
 
       {/* LaTeX Rendering Toggle */}
       <div className="flex items-center space-x-2">
@@ -136,7 +142,13 @@ export default function Page() {
             </CardContent>
           </Card>
 
-          {tdp && <TDP data={tdp.export()} recognizes={tdp.recognize} latex={latexEnabled} />}
+          {tdp && (
+            <TDP
+              data={tdp.export()}
+              recognizes={tdp.recognize}
+              latex={latexEnabled}
+            />
+          )}
         </>
       )}
     </div>
