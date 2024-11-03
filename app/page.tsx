@@ -4,17 +4,24 @@ import { useState, ChangeEvent } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 import "katex/dist/katex.min.css";
 import TeX from "@matejmazur/react-katex";
+import { NRPP } from "@davnpsh/nrpp";
+import Productions from "@/components/ownui/Productions";
 
 export default function Page() {
+  const [latexEnabled, setLatexEnabled] = useState(true);
   const [fileContent, setFileContent] = useState<string | null>(null);
+  const [parser, setParser] = useState<NRPP | null>(null);
 
   const handleFileUpload = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file && file.type === "text/plain") {
       const reader = new FileReader();
       reader.onload = (e) => {
+        // Set file content
         const content = e.target?.result as string;
         setFileContent(content);
       };
@@ -25,9 +32,30 @@ export default function Page() {
     }
   };
 
+  const handleAnalyze = () => {
+    if (fileContent) {
+      // Declare new parser
+      try {
+        setParser(new NRPP(fileContent));
+      } catch {}
+    }
+  };
+
   return (
     <div className="container mx-auto p-4 space-y-6 max-w-4xl">
       <h1 className="text-2xl font-bold mb-4 select-none">nrpp</h1>
+
+      {/* LaTeX Rendering Toggle */}
+      <div className="flex items-center space-x-2">
+        <Switch
+          id="latex-toggle"
+          checked={latexEnabled}
+          onCheckedChange={setLatexEnabled}
+        />
+        <Label htmlFor="latex-toggle">
+          <TeX math="\LaTeX" /> rendering (experimental)
+        </Label>
+      </div>
 
       {/* File Upload Section */}
       <Card>
@@ -45,7 +73,7 @@ export default function Page() {
               accept=".txt"
               onChange={handleFileUpload}
             />
-            <Button>Analize</Button>
+            <Button onClick={handleAnalyze}>Analyze</Button>
           </div>
 
           {fileContent && (
@@ -58,6 +86,14 @@ export default function Page() {
           )}
         </CardContent>
       </Card>
+
+      {/* Parser area */}
+      {parser && (
+        <Productions
+          productions={parser.grammar.export()}
+          latex={latexEnabled}
+        />
+      )}
     </div>
   );
 }
