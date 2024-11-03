@@ -10,6 +10,7 @@ import "katex/dist/katex.min.css";
 import TeX from "@matejmazur/react-katex";
 import { NRPP } from "@davnpsh/nrpp";
 import Productions from "@/components/ownui/Productions";
+import First from "@/components/ownui/First";
 
 export default function Page() {
   const [latexEnabled, setLatexEnabled] = useState(true);
@@ -89,10 +90,15 @@ export default function Page() {
 
       {/* Parser area */}
       {parser && (
-        <Productions
-          productions={parser.grammar.export()}
-          latex={latexEnabled}
-        />
+        <>
+          <Productions
+            productions={parser.grammar.export()}
+            latex={latexEnabled}
+          />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <First data={parser.first.export()} latex={latexEnabled} />
+          </div>
+        </>
       )}
     </div>
   );
