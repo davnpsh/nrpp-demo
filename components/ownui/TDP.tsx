@@ -25,7 +25,14 @@ export default function TDP({ data, recognizes, latex }: TDPProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Result: {recognizes ? <Check className="inline-block" /> : <X className="inline-block"  />}</CardTitle>
+        <CardTitle>
+          Result:{" "}
+          {recognizes ? (
+            <Check className="inline-block text-green-400" />
+          ) : (
+            <X className="inline-block text-red-600" />
+          )}
+        </CardTitle>
       </CardHeader>
       <CardContent className="max-h-96 overflow-y-auto">
         <Table>
@@ -50,10 +57,22 @@ export default function TDP({ data, recognizes, latex }: TDPProps) {
                       <TeX math={fix_latex(row.stack)} />
                     </TableCell>
                     <TableCell>
-                    <TeX math={fix_latex(row.in)} />
+                      <TeX math={fix_latex(row.in)} />
                     </TableCell>
                     <TableCell>
-                    <TeX math={row.out ? fix_latex(row.out.replace(/->/g, " \\rightarrow ")) : ""} />
+                      {index === data.length - 1 && !recognizes ? (
+                        <TeX className="text-red-600 font-bold" math="error()" />
+                      ) : (
+                        <TeX
+                          math={
+                            row.out
+                              ? fix_latex(
+                                  row.out.replace(/->/g, " \\rightarrow ")
+                                )
+                              : ""
+                          }
+                        />
+                      )}
                     </TableCell>
                   </TableRow>
                 ))
@@ -66,7 +85,13 @@ export default function TDP({ data, recognizes, latex }: TDPProps) {
                       <pre>{row.in}</pre>
                     </TableCell>
                     <TableCell>
-                      <pre>{row.out}</pre>
+                      <pre>
+                        {index === data.length - 1 && !recognizes ? (
+                          <p className="text-red-600 font-bold">error()</p>
+                        ) : (
+                          row.out
+                        )}
+                      </pre>
                     </TableCell>
                   </TableRow>
                 ))}
